@@ -1,0 +1,5 @@
+profile: service
+defaultPackage: com.masmovil.it.ticketing.Application
+---
+testFramework: junit
+sourceLanguage: java

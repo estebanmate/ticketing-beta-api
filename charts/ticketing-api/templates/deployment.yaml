@@ -1,0 +1,78 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "api.name" . }}
+  labels:
+    app: {{ template "api.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    tier: backend
+spec:
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "api.fullname" . }}
+        release: {{ .Release.Name }}
+        tier: backend
+    spec:
+      affinity:
+            podAntiAffinity:
+              preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                podAffinityTerm:
+                  labelSelector:
+                    matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                      - {{ template "api.fullname" . }}
+                  topologyKey: kubernetes.io/hostname
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+          - name: APP_ENV
+            value: {{ .Values.environment }}
+          - name: SPRING_PROFILES_ACTIVE
+            value: {{ .Values.environment }}
+          - name: TRACK
+            value: {{ .Values.environment }}
+          - name: SERVICES_ORDERS_BASEPATH
+            value: {{ .Values.endpoints.orders }}
+          - name: SERVICES_SECURITY_BASEPATH
+            value: {{ .Values.endpoints.security }}
+          ports:
+            - containerPort: {{ .Values.service.internalPort }}
+          livenessProbe:
+            initialDelaySeconds: 120
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+            successThreshold: 1
+            httpGet:
+              httpHeaders:
+              - name: customer-session-id
+                value: k8s-liveness-probe
+              path: /actuator/health
+              port: {{ .Values.service.internalPort }}
+          readinessProbe:
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+            successThreshold: 1
+            httpGet:
+              httpHeaders:
+              - name: customer-session-id
+                value: k8s-liveness-probe
+              path: /actuator/health
+              port: {{ .Values.service.internalPort }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+    {{- end }}

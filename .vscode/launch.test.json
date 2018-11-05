@@ -1,0 +1,30 @@
+{
+    "run": {
+        "default": "",
+        "items": [
+            {
+                "name": "microservice-ticketing",
+                "projectName": "microservice-ticketing",
+                "workingDirectory": "c:\\workspaces\\MasMovil\\microservice-ticketing",
+                "args": [],
+                "vmargs": [],
+                "env": {},
+                "preLaunchTask": ""
+            }
+        ]
+    },
+    "debug": {
+        "default": "",
+        "items": [
+            {
+                "name": "microservice-ticketing",
+                "projectName": "microservice-ticketing",
+                "workingDirectory": "c:\\workspaces\\MasMovil\\microservice-ticketing",
+                "args": [],
+                "vmargs": [],
+                "env": {},
+                "preLaunchTask": ""
+            }
+        ]
+    }
+}

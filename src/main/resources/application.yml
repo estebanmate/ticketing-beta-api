@@ -1,0 +1,20 @@
+micronaut:
+    application:
+        name: ticketing-api
+                
+token:
+    grant-type: password
+    client-id: 3MVG95AcBeaB55lWK0yyel0sifPH4BlwToZOKe56tYXWIMsFx07oqVzlrdINIkgUV2aWWe5sgjHZD_8vw1nRT
+    client-secret: 9151296343038040544
+    username: integration.tkt@masmovil.com.testtkt01
+    password: Integration@01nMzSjEZSDeOo6CNpWZXXH4Lzf
+
+redis:
+    uri: redis://172.17.0.2
+    port: 6379
+
+tags:
+    level-reclamaciones: Reclamaciones
+    categorias: Categorias
+    subcategorias: Sub-Categorias
+     
